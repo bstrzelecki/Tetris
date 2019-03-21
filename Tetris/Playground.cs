@@ -15,6 +15,12 @@ namespace Tetris
         private Point figurePosition;
         GraphicsDevice graphicsDevice;
         bool isRotated = false;
+        bool isMoved = false;
+
+        float moveCooldown;
+        float fallCooldown;
+        private float moveCost;
+
         public Playground(GraphicsDeviceManager graphics, int sizeX, int sizeY, GraphicsDevice gd)
         {
             this.sizeX = sizeX;
@@ -34,6 +40,11 @@ namespace Tetris
                 }
             }
             currentFigure = new TheT();
+        }
+        public void TimeUpdate(GameTime gameTime)
+        {
+            moveCooldown += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            fallCooldown += (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
         public void Update()
         {
@@ -55,21 +66,28 @@ namespace Tetris
             KeyboardState state = Keyboard.GetState();
 
 
-
-            if (state.IsKeyDown(Keys.A))
+            if (state.IsKeyDown(Keys.A) && !isMoved)
             {
                 figurePosition.x -= 1;
                 if (Physics.CheckCollisions(Physics.ToWorldPosition(currentFigure.getFigure(), figurePosition), -1))
+                {
                     figurePosition.x += 1;
+                }
+                isMoved = true;
             }
-            if (state.IsKeyDown(Keys.D))
+
+            if (state.IsKeyDown(Keys.D) && !isMoved)
             {
                 figurePosition.x += 1;
                 if (Physics.CheckCollisions(Physics.ToWorldPosition(currentFigure.getFigure(), figurePosition), sizeX))
                 {
                     figurePosition.x -= 1;
                 }
+                isMoved = true;
             }
+
+            if (state.IsKeyUp(Keys.A) && state.IsKeyUp(Keys.D)) isMoved = false;
+
             if (state.IsKeyDown(Keys.R) && !isRotated)
             {
                 currentFigure.Rotate(1);
@@ -77,13 +95,14 @@ namespace Tetris
                 {
                     currentFigure.Rotate(-1);
                 }
+                if (Physics.CheckCollisions(Physics.ToWorldPosition(currentFigure.getFigure(), figurePosition), -1))
+                {
+                    currentFigure.Rotate(-1);
+                }
                 isRotated = true;
             }
             if(state.IsKeyUp(Keys.R))isRotated = false;
-
-
         }
-
         public void Draw()
         {
             spriteBatch.Begin();

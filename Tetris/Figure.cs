@@ -60,6 +60,7 @@ namespace Tetris
         {
             rotation += i;
             if (rotation > 3) rotation = 0;
+            if (rotation < 0) rotation = 3;
             return getFigure();
         }
     }

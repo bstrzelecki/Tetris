@@ -67,6 +67,7 @@ namespace Tetris
 
             // TODO: Add your update logic here
             mainScene.Update();
+            mainScene.TimeUpdate(gameTime);
             base.Update(gameTime);
         }
 
