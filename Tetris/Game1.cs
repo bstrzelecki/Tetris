@@ -28,7 +28,7 @@ namespace Tetris
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            IsMouseVisible = true;
             base.Initialize();
         }
 
@@ -41,7 +41,7 @@ namespace Tetris
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             block = Content.Load<Texture2D>("block");
-            mainScene = new Playground(graphics, 10, 20);
+            mainScene = new Playground(graphics, 10, 20, GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
         }
@@ -66,7 +66,7 @@ namespace Tetris
                 Exit();
 
             // TODO: Add your update logic here
-
+            mainScene.Update();
             base.Update(gameTime);
         }
 
@@ -79,7 +79,7 @@ namespace Tetris
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-
+            mainScene.Draw();
             base.Draw(gameTime);
         }
     }

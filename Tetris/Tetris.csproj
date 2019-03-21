@@ -42,7 +42,10 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Block.cs" />
+    <Compile Include="Figure.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="Physics.cs" />
     <Compile Include="Playground.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
