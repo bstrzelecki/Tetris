@@ -8,6 +8,20 @@ namespace Tetris
 {
     class Physics
     {
+        public static List<Point> getArea(int x1, int y1, int x2 , int y2)
+        {
+            List<Point> map = new List<Point>();
+
+            for(int x = x1; x < x2; x++)
+            {
+                for(int y = y1; y < y2; y++)
+                {
+                    map.Add(new Point(x, y));
+                }
+            }
+
+            return map;
+        }
         public static List<Point> ToWorldPosition(List<Point> obj, Point pos){
             List<Point> temp = new List<Point>();
 

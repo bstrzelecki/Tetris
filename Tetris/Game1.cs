@@ -14,6 +14,7 @@ namespace Tetris
         SpriteBatch spriteBatch;
         Playground mainScene;
         public static Texture2D block;
+        public static Texture2D uiblock;
         public static SpriteFont font;
         public static Song song;
         public Game1()
@@ -44,6 +45,7 @@ namespace Tetris
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             block = Content.Load<Texture2D>("block");
+            uiblock = Content.Load<Texture2D>("uiblock");
             font = Content.Load<SpriteFont>("font");
             song = Content.Load<Song>("tetris");
             MediaPlayer.Play(song);
@@ -71,7 +73,7 @@ namespace Tetris
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
+            
             // TODO: Add your update logic here
             mainScene.Update();
             base.Update(gameTime);
