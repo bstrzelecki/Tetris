@@ -15,21 +15,24 @@ namespace Tetris
         public Block[,] map;
         public List<Point> blockMap;
         private Figure currentFigure;
+        private Figure nextFigure;
         private Point figurePosition = new Point(4,0);
         GraphicsDevice graphicsDevice;
         bool isRotated = false;
         bool isMoved = false;
-
+        public int uiSize = 3;
         float fallCooldown;
         private float fallRecover = 1f;
         bool figureChanged = false;
-
+        int score = 0;
+        public bool isGameOver = false;
+        public int highScore;
         public Playground(GraphicsDeviceManager graphics, int sizeX, int sizeY, GraphicsDevice gd)
         {
             this.sizeX = sizeX;
             this.sizeY = sizeY;
             graphics.PreferredBackBufferHeight = sizeY * textureSize;
-            graphics.PreferredBackBufferWidth = sizeX * textureSize;
+            graphics.PreferredBackBufferWidth = sizeX * textureSize + uiSize * textureSize;
             graphics.ApplyChanges();
             spriteBatch = new SpriteBatch(gd);
             graphicsDevice = gd;
@@ -44,14 +47,17 @@ namespace Tetris
             }
             blockMap = Reference.getStartMap(sizeX, sizeY);
             currentFigure = Figure.getRandomFigure();
-            fallRecover += 0.05f;
+            nextFigure = Figure.getRandomFigure();
+            highScore = Serializer.getHighScore();
         }
         private void DropFigure()
         {
+            if (isGameOver) return;
             figurePosition.y++;
             if(Physics.CheckCollisions(Physics.ToWorldPosition(currentFigure.getFigure(), figurePosition), blockMap))
             {
                 figurePosition.y--;
+                CheckLost();
                 foreach (Point point in currentFigure.getFigure()) {
                     blockMap.Add(new Point(point.x + figurePosition.x, point.y + figurePosition.y));
                 }
@@ -64,8 +70,10 @@ namespace Tetris
                     catch { }
                 }
                 figurePosition = new Point(4, 0);
-                currentFigure = Figure.getRandomFigure();
+                currentFigure = nextFigure;
+                nextFigure = Figure.getRandomFigure();
                 figureChanged = true;
+                fallRecover += 0.05f;
             }
             CheckFullRow();
         }
@@ -84,6 +92,7 @@ namespace Tetris
         }
         private void RemoveRow(int y)
         {
+            score++;
             List<Point> temp = new List<Point>();
 
             foreach(Point point in blockMap)
@@ -99,8 +108,17 @@ namespace Tetris
             }
             blockMap = temp;
         }
+        private void CheckLost()
+        {
+            if (figurePosition.y < 4){
+                isGameOver = true;
+                if (score > highScore)
+                    Serializer.setHighScore(score);
+            }
+        }
         public void Update()
         {
+            if (isGameOver) return;
             CheckFullRow();
             KeyboardState state = Keyboard.GetState();
 
@@ -168,15 +186,6 @@ namespace Tetris
         public void Draw()
         {
             spriteBatch.Begin();
-            //for(int x = 0; x < sizeX;x++){
-            //    for (int y = 0; y < sizeY; y++) {
-            //        Block block = map[x,y];
-            //        if (block.isActive)
-            //        {
-            //            spriteBatch.Draw(Game1.block, new Vector2(x*textureSize, y * textureSize),Color.White);
-            //        }
-            //    }
-            //}
             foreach (Point block in blockMap)
             {
                 spriteBatch.Draw(Game1.block, new Vector2(block.x * textureSize, block.y * textureSize), Color.White);
@@ -186,6 +195,17 @@ namespace Tetris
             {
                 spriteBatch.Draw(Game1.block, new Vector2(block.x * textureSize, block.y * textureSize), Color.White);
             }
+            spriteBatch.DrawString(Game1.font, "Next", new Vector2(sizeX * textureSize, 0), Color.White);
+            foreach(Point block in nextFigure.getFigure())
+            {
+                spriteBatch.Draw(Game1.block, new Vector2(sizeX * textureSize + block.x * textureSize, 30 + block.y * textureSize), Color.White);
+            }
+            spriteBatch.DrawString(Game1.font, "Score", new Vector2(sizeX * textureSize, 5 * textureSize), Color.White);
+            spriteBatch.DrawString(Game1.font, score.ToString(), new Vector2(sizeX * textureSize, 5 * textureSize + 20), Color.White);
+            spriteBatch.DrawString(Game1.font, "High Score", new Vector2(sizeX * textureSize, 5 * textureSize + 40), Color.White);
+            spriteBatch.DrawString(Game1.font, highScore.ToString(), new Vector2(sizeX * textureSize, 5 * textureSize + 60), Color.White);
+            if (isGameOver)
+                spriteBatch.DrawString(Game1.font, "GameOver", new Vector2(sizeX * textureSize / 2 - 70, sizeY * textureSize / 2), Color.White,0,Vector2.Zero,new Vector2(2,2),SpriteEffects.None,0);
             spriteBatch.End();
         }
     }

@@ -13,6 +13,7 @@ namespace Tetris
         SpriteBatch spriteBatch;
         Playground mainScene;
         public static Texture2D block;
+        public static SpriteFont font;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -41,6 +42,7 @@ namespace Tetris
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             block = Content.Load<Texture2D>("block");
+            font = Content.Load<SpriteFont>("font");
             mainScene = new Playground(graphics, 10, 20, GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
@@ -76,7 +78,7 @@ namespace Tetris
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
             mainScene.Draw();
