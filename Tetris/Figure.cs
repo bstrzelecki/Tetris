@@ -13,7 +13,7 @@ namespace Tetris
         public static Figure getRandomFigure()
         {
             Random rng = new Random();
-            switch (rng.Next(5)){
+            switch (rng.Next(7)){
                 case 0:
                     return new TheT();
                 case 1:
@@ -24,13 +24,18 @@ namespace Tetris
                     return new TheDogLeft();
                 case 4:
                     return new TheDogRight();
+                case 5:
+                    return new TheLLeft();
+                case 6:
+                    return new TheLRight();
             }
             return new TheT();
         }
     }
     public struct Point
     {
-        public int x, y;
+        public int x;
+        public int y;
         public Point(int x, int y)
         {
             this.x = x;
@@ -69,6 +74,92 @@ namespace Tetris
                     points.Add(new Point(1,0));
                     points.Add(new Point(1,1));
                     points.Add(new Point(1,2));
+                    break;
+            }
+            return points;
+        }
+        public override List<Point> Rotate(int i)
+        {
+            rotation += i;
+            if (rotation > 3) rotation = 0;
+            if (rotation < 0) rotation = 3;
+            return getFigure();
+        }
+    }
+    public class TheLLeft : Figure
+    {
+        protected int rotation = 0;
+        public override List<Point> getFigure()
+        {
+            List<Point> points = new List<Point>();
+            switch (rotation)
+            {
+                case 0:
+                    points.Add(new Point(0, 2));
+                    points.Add(new Point(1, 0));
+                    points.Add(new Point(1, 1));
+                    points.Add(new Point(1, 2));
+                    break;
+                case 1:
+                    points.Add(new Point(0, 0));
+                    points.Add(new Point(0, 1));
+                    points.Add(new Point(1, 1));
+                    points.Add(new Point(2, 1));
+                    break;
+                case 2:
+                    points.Add(new Point(0, 0));
+                    points.Add(new Point(0, 1));
+                    points.Add(new Point(0, 2));
+                    points.Add(new Point(1, 0));
+                    break;
+                case 3:
+                    points.Add(new Point(0, 0));
+                    points.Add(new Point(1, 0));
+                    points.Add(new Point(2, 0));
+                    points.Add(new Point(2, 1));
+                    break;
+            }
+            return points;
+        }
+        public override List<Point> Rotate(int i)
+        {
+            rotation += i;
+            if (rotation > 3) rotation = 0;
+            if (rotation < 0) rotation = 3;
+            return getFigure();
+        }
+    }
+    public class TheLRight : Figure
+    {
+        protected int rotation = 0;
+        public override List<Point> getFigure()
+        {
+            List<Point> points = new List<Point>();
+            switch (rotation)
+            {
+                case 0:
+                    points.Add(new Point(0, 0));
+                    points.Add(new Point(0, 1));
+                    points.Add(new Point(0, 2));
+                    points.Add(new Point(1, 2));
+                    break;
+                case 1:
+                    points.Add(new Point(0, 0));
+                    points.Add(new Point(1, 0));
+                    points.Add(new Point(2, 0));
+                    points.Add(new Point(0, 1));
+                    break;
+                case 2:
+                    points.Add(new Point(0, 0));
+                    points.Add(new Point(1, 0));
+                    points.Add(new Point(1, 1));
+                    points.Add(new Point(1, 2));
+                    break;
+                case 3:
+                    points.Add(new Point(0, 1));
+                    points.Add(new Point(1, 1));
+                    points.Add(new Point(2, 0));
+                    points.Add(new Point(2, 1));
                     break;
             }
             return points;
