@@ -31,6 +31,17 @@ namespace Tetris
             }
             return false;
         }
+        public static bool CheckCollisions(List<Point> a, List<Point> b)
+        {
+            foreach(Point point in a)
+            {
+                foreach(Point p in b)
+                {
+                    if (CheckCollisions(point, p)) return true;
+                }
+            }
+            return false;
+        }
         public static bool CheckCollisions(Point a, int b)
         {
             if (a.x == b) return true;
