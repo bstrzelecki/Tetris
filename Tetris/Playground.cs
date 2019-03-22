@@ -73,7 +73,7 @@ namespace Tetris
                 currentFigure = nextFigure;
                 nextFigure = Figure.getRandomFigure();
                 figureChanged = true;
-                fallRecover += 0.05f;
+                fallRecover += 0.01f;
             }
             CheckFullRow();
         }
