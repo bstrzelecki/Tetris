@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 
 namespace Tetris
 {
@@ -14,6 +15,7 @@ namespace Tetris
         Playground mainScene;
         public static Texture2D block;
         public static SpriteFont font;
+        public static Song song;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -43,6 +45,9 @@ namespace Tetris
             spriteBatch = new SpriteBatch(GraphicsDevice);
             block = Content.Load<Texture2D>("block");
             font = Content.Load<SpriteFont>("font");
+            song = Content.Load<Song>("tetris");
+            MediaPlayer.Play(song);
+            MediaPlayer.IsRepeating = true;
             mainScene = new Playground(graphics, 10, 20, GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
